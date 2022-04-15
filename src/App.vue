@@ -4,10 +4,10 @@
 			<AddTodo />
 		</Container>
 		<Container>
-			<AddTodo />
+			<Todo />
 		</Container>
 		<Container>
-			<AddTodo />
+			<p>lol</p>
 		</Container>
 	</div>
 </template>
@@ -15,6 +15,18 @@
 <script setup>
 import Container from './components/Container.vue';
 import AddTodo from './components/AddTodo.vue';
+import Todo from './components/Todo.vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
+const getTaskFromLocalStorage = () => {
+	const tasks = JSON.parse(localStorage.getItem('smart-tasks'));
+	if (tasks) {
+		store.commit('setTasks', tasks);
+	}
+};
+getTaskFromLocalStorage();
 </script>
 
 <style lang="scss">

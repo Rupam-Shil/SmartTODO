@@ -34,12 +34,19 @@
 				<textarea v-model="description"></textarea>
 			</div>
 		</div>
-		<button class="black-btn">Save Task</button>
+		<button
+			class="black-btn"
+			@click="addTask"
+			:class="{ moveright: activeAnimation }"
+		>
+			Save Task
+		</button>
 	</div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 
 const colorsArray = ref([
 	'#FBE115',
@@ -55,9 +62,29 @@ const colorsArray = ref([
 const selectedColor = ref('#FBE115');
 const title = ref('');
 const description = ref('');
+const store = useStore();
+const activeAnimation = ref(false);
 
 const setColorValue = (color) => {
 	selectedColor.value = color;
+};
+
+const addTask = () => {
+	activeAnimation.value = false;
+	if (selectedColor.value && title.value && description.value) {
+		store.commit('addTasks', {
+			color: selectedColor.value,
+			title: title.value,
+			description: description.value,
+		});
+		selectedColor.value = '#FBE115';
+		title.value = '';
+		description.value = '';
+		activeAnimation.value = true;
+		setTimeout(() => {
+			activeAnimation.value = false;
+		}, 8000);
+	}
 };
 </script>
 
@@ -91,7 +118,7 @@ const setColorValue = (color) => {
 	}
 	.color-circle {
 		&.active {
-			border: 2px dashed var(--label);
+			border: 2px dashed #000;
 			filter: drop-shadow(0 0 3px rgba(193, 193, 193, 0.9));
 		}
 		width: 1.5rem;
@@ -153,5 +180,19 @@ textarea {
 	color: #fff;
 	padding: 0.5rem;
 	cursor: pointer;
+}
+
+.moveright {
+	animation: moveright 8s ease-in-out;
+}
+@keyframes moveright {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+	20%,
+	85% {
+		transform: translateX(200%);
+	}
 }
 </style>
