@@ -104,18 +104,18 @@ const onDragOver = (section, event) => {
 		{ offset: Number.NEGATIVE_INFINITY }
 	).element;
 
-	indexToMove.value = [...section.querySelectorAll('.draggable')].findIndex(
+	indexToMove.value = [...section.querySelectorAll('.draggable')].indexOf(
 		targetElement
 	);
 };
 const onDrop = (event) => {
 	const newTaskState = [...tasks.value];
-	const targetId = tasks.value.findIndex(
+	const targetIndex = tasks.value.findIndex(
 		(each) => each.id === event.dataTransfer.getData('itemID')
 	);
-	let item = newTaskState.splice(targetId, 1);
-	newTaskState.splice(indexToMove, 0, item);
-	console.log(newTaskState);
+	newTaskState.splice(targetIndex, 1);
+	newTaskState.splice(indexToMove.value, 0, tasks.value[targetIndex]);
+	store.commit('setTasks', newTaskState);
 };
 </script>
 

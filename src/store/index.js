@@ -13,6 +13,7 @@ const store = createStore({
 	mutations: {
 		setTasks(state, payload) {
 			state.tasks = payload;
+			setItemInLocalStorage(state.tasks);
 		},
 		addTasks(state, payload) {
 			state.tasks = [payload, ...state.tasks];
