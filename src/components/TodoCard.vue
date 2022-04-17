@@ -13,8 +13,7 @@
 </template>
 
 <script setup>
-import { toRefs, onBeforeMount } from 'vue';
-import { invertColor } from '../utils/helpers';
+import { toRefs } from 'vue';
 
 const props = defineProps({
 	task: {
@@ -23,10 +22,6 @@ const props = defineProps({
 });
 
 const { task } = toRefs(props);
-
-onBeforeMount(() => {
-	task.value.fontColor = invertColor(task.value.color);
-});
 </script>
 
 <style lang="scss" scoped>

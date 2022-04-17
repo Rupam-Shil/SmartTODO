@@ -47,10 +47,15 @@ watch(tasks, () => {
 }
 @keyframes fadein {
 	0% {
+		position: absolute;
 		opacity: 0;
 	}
 	55% {
+		position: absolute;
 		opacity: 0;
+	}
+	57% {
+		position: relative;
 	}
 	69%,
 	100% {
@@ -59,10 +64,12 @@ watch(tasks, () => {
 }
 .animateblock {
 	position: absolute;
-	bottom: 0;
+	bottom: 1rem;
 	width: 100%;
+	width: calc(100% - 2rem);
+	margin: 0 auto;
 	height: 2.5rem;
-	background: rgba(0, 0, 0, 0.193);
+	background: rgba(0, 0, 0, 1);
 	border-radius: 100vmax;
 	animation: expand 8s ease-in-out forwards;
 }

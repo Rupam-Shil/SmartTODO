@@ -47,6 +47,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useStore } from 'vuex';
+import { invertColor } from '../utils/helpers';
 
 const colorsArray = ref([
 	'#FBE115',
@@ -76,6 +77,7 @@ const addTask = () => {
 			color: selectedColor.value,
 			title: title.value,
 			description: description.value,
+			fontColor: invertColor(selectedColor.value),
 		});
 		selectedColor.value = '#FBE115';
 		title.value = '';
@@ -172,10 +174,11 @@ textarea {
 .black-btn {
 	outline: none;
 	border: none;
-	width: 100%;
+	width: calc(100% - 2rem);
+	margin: 0 auto;
 	border-radius: 100vmax;
 	position: absolute;
-	bottom: 0;
+	bottom: 1rem;
 	background: #000;
 	color: #fff;
 	padding: 0.5rem;

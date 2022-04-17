@@ -116,7 +116,7 @@ select {
 	display: flex;
 	flex-direction: column;
 	min-height: 100%;
-	position: relative;
+	// position: relative;
 }
 .header-black {
 	font-size: 1.4rem;
