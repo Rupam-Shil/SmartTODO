@@ -36,6 +36,10 @@
 		</div>
 		<button
 			class="black-btn"
+			:style="{
+				background: selectedColor,
+				color: invertColor(selectedColor),
+			}"
 			@click="addTask"
 			:class="{ moveright: activeAnimation }"
 		>
@@ -48,7 +52,7 @@
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { invertColor } from '../utils/helpers';
-
+import { nanoid } from 'nanoid';
 const colorsArray = ref([
 	'#FBE115',
 	'#4AEED1',
@@ -78,8 +82,8 @@ const addTask = () => {
 			title: title.value,
 			description: description.value,
 			fontColor: invertColor(selectedColor.value),
+			id: nanoid(),
 		});
-		selectedColor.value = '#FBE115';
 		title.value = '';
 		description.value = '';
 		activeAnimation.value = true;
@@ -179,8 +183,6 @@ textarea {
 	border-radius: 100vmax;
 	position: absolute;
 	bottom: 1rem;
-	background: #000;
-	color: #fff;
 	padding: 0.5rem;
 	cursor: pointer;
 }

@@ -9,17 +9,37 @@
 			<div class="top-header mt-4" v-if="!tasks.length">
 				<p>😭No Todo yet. Do you want to start a new task?</p>
 			</div>
-			<div class="todo-con" v-else>
+			<div
+				class="todo-con"
+				@drop="onDrop($event)"
+				@dragover.prevent="onDragOver(dragSectionOne, $event)"
+				@dragenter.prevent
+				v-else
+				ref="dragSectionOne"
+			>
 				<div
+					draggable="true"
+					class="draggable"
+					@dragstart="startDrag(task.id, $event)"
+					@dragend="endDrag($event)"
 					v-for="(task, index) in tasks"
 					:key="index"
 					:class="{ fadein: index === 0 && activeAnimation }"
 				>
-					<TodoCard :task="task" />
+					<TodoCard :task="task" @deleteTask="deleteTask" />
 				</div>
 			</div>
 		</div>
-		<div :class="{ animateblock: activeAnimation }"></div>
+		<div
+			class="animateblock"
+			:class="{ active: activeAnimation }"
+			:style="{
+				background: tasks?.[0]?.color || 'transparent',
+				color: tasks?.[0]?.fontColor || 'transparent',
+			}"
+		>
+			{{ animationButtonText }}
+		</div>
 	</div>
 </template>
 
@@ -30,15 +50,73 @@ import TodoCard from './TodoCard.vue';
 
 const store = useStore();
 const activeAnimation = ref(false);
+const animationButtonText = ref('');
+const dragSectionOne = ref(null);
+const indexToMove = ref(-1);
 
 const tasks = computed(() => store.state.tasks);
 
-watch(tasks, () => {
-	activeAnimation.value = true;
+watch(activeAnimation, () => {
 	setTimeout(() => {
-		activeAnimation.value = false;
-	}, 8000);
+		animationButtonText.value = 'Adding...';
+	}, 500);
+	setTimeout(() => {
+		animationButtonText.value = 'Finishing Up...';
+	}, 6000);
 });
+
+watch(tasks, (current, prev) => {
+	if (current.length > prev.length) {
+		activeAnimation.value = true;
+		setTimeout(() => {
+			activeAnimation.value = false;
+		}, 8000);
+	}
+});
+
+const deleteTask = (id) => {
+	store.commit('deleteTasks', id);
+};
+
+const startDrag = (id, event) => {
+	event.dataTransfer.dropEffect = 'move';
+	event.dataTransfer.effectAllowed = 'move';
+	event.dataTransfer.setData('itemID', id);
+	event.srcElement.classList.add('dragging');
+};
+const endDrag = (event) => {
+	event.srcElement.classList.remove('dragging');
+};
+const onDragOver = (section, event) => {
+	const draggableElements = [
+		...section.querySelectorAll('.draggable:not(.dragging)'),
+	];
+	const targetElement = draggableElements.reduce(
+		(closest, child) => {
+			const box = child.getBoundingClientRect();
+			const offset = event.clientY - box.top - box.height / 2;
+			if (offset < 0 && offset > closest.offset) {
+				return { offset: offset, element: child };
+			} else {
+				return closest;
+			}
+		},
+		{ offset: Number.NEGATIVE_INFINITY }
+	).element;
+
+	indexToMove.value = [...section.querySelectorAll('.draggable')].findIndex(
+		targetElement
+	);
+};
+const onDrop = (event) => {
+	const newTaskState = [...tasks.value];
+	const targetId = tasks.value.findIndex(
+		(each) => each.id === event.dataTransfer.getData('itemID')
+	);
+	let item = newTaskState.splice(targetId, 1);
+	newTaskState.splice(indexToMove, 0, item);
+	console.log(newTaskState);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -69,8 +147,13 @@ watch(tasks, () => {
 	width: calc(100% - 2rem);
 	margin: 0 auto;
 	height: 2.5rem;
-	background: rgba(0, 0, 0, 1);
 	border-radius: 100vmax;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transform: translateX(-200%);
+}
+.animateblock.active {
 	animation: expand 8s ease-in-out forwards;
 }
 @keyframes expand {

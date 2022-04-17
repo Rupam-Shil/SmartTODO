@@ -18,6 +18,10 @@ const store = createStore({
 			state.tasks = [payload, ...state.tasks];
 			setItemInLocalStorage(state.tasks);
 		},
+		deleteTasks(state, payload) {
+			state.tasks = state.tasks.filter((task) => task.id !== payload);
+			setItemInLocalStorage(state.tasks);
+		},
 	},
 });
 
