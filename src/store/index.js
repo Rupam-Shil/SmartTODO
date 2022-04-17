@@ -15,7 +15,7 @@ const store = createStore({
 			state.tasks = payload;
 		},
 		addTasks(state, payload) {
-			state.tasks = [...state.tasks, payload];
+			state.tasks = [payload, ...state.tasks];
 			setItemInLocalStorage(state.tasks);
 		},
 	},

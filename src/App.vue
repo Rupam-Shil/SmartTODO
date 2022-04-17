@@ -118,4 +118,21 @@ select {
 	min-height: 100%;
 	position: relative;
 }
+.header-black {
+	font-size: 1.4rem;
+	font-weight: 700;
+}
+.mt-4 {
+	margin-top: 1rem;
+}
+.mb-2 {
+	margin-bottom: 0.5rem;
+}
+.mb-4 {
+	margin-bottom: 1rem;
+}
+.card-header {
+	font-size: 1.2rem;
+	font-weight: 500;
+}
 </style>
