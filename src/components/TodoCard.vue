@@ -12,12 +12,18 @@
 		<div class="delete-icon" @click="deleteThisTask">
 			<img src="../assets/cross.svg" alt="" />
 		</div>
+		<div class="checked">
+			<button :style="{ borderColor: task.fontColor }" @click="checked">
+				<div class="checked-btn" ref="buttonRef"></div>
+			</button>
+		</div>
 	</div>
 </template>
 
 <script setup>
-import { toRefs } from 'vue';
+import { ref, toRefs } from 'vue';
 
+const buttonRef = ref();
 const props = defineProps({
 	task: {
 		type: Object,
@@ -29,6 +35,10 @@ const emits = defineEmits(['deleteTask']);
 
 const deleteThisTask = () => {
 	emits('deleteTask', task.value.id);
+};
+
+const checked = () => {
+	buttonRef.value.style.backgroundColor = task.value.fontColor;
 };
 </script>
 
@@ -63,6 +73,28 @@ const deleteThisTask = () => {
 	img {
 		width: 12px;
 		aspect-ratio: 1/1;
+	}
+}
+.checked {
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+	button {
+		border-radius: 50%;
+		width: 20px;
+		height: 20px;
+		background: transparent;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 2px solid;
+		cursor: pointer;
+		padding: 0;
+	}
+	.checked-btn {
+		border-radius: 50%;
+		width: 10px;
+		height: 10px;
 	}
 }
 </style>

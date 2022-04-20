@@ -83,6 +83,7 @@ const addTask = () => {
 			description: description.value,
 			fontColor: invertColor(selectedColor.value),
 			id: nanoid(),
+			isCOmplete: false,
 		});
 		title.value = '';
 		description.value = '';
