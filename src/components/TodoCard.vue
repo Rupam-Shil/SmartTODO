@@ -34,6 +34,7 @@ const { task } = toRefs(props);
 const emits = defineEmits(['deleteTask']);
 
 const deleteThisTask = () => {
+	//delete
 	emits('deleteTask', task.value.id);
 };
 
