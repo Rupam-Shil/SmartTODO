@@ -1,14 +1,19 @@
 <template>
-	<div class="section">
-		<Container>
-			<AddTodo />
-		</Container>
-		<Container>
-			<Todo />
-		</Container>
-		<Container>
-			<Later />
-		</Container>
+	<div>
+		<div v-if="!isMobile" class="section">
+			<Container>
+				<AddTodo />
+			</Container>
+			<Container>
+				<Todo />
+			</Container>
+			<Container>
+				<Later />
+			</Container>
+		</div>
+		<div class="section" v-else>
+			This app is not available on mobile devices
+		</div>
 	</div>
 </template>
 
@@ -17,10 +22,12 @@ import Container from './components/Container.vue';
 import AddTodo from './components/AddTodo.vue';
 import Todo from './components/Todo.vue';
 import Later from './components/Later.vue';
+import { onMounted, ref } from 'vue';
 
 import { useStore } from 'vuex';
 
 const store = useStore();
+const isMobile = ref(false);
 
 const getTaskFromLocalStorage = () => {
 	const tasks = JSON.parse(localStorage.getItem('smart-tasks'));
@@ -33,6 +40,12 @@ const getTaskFromLocalStorage = () => {
 	}
 };
 getTaskFromLocalStorage();
+
+onMounted(() => {
+	if (window.innerWidth < 900) {
+		isMobile.value = true;
+	}
+});
 </script>
 
 <style lang="scss">
