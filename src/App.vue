@@ -7,7 +7,7 @@
 			<Todo />
 		</Container>
 		<Container>
-			<p>lol</p>
+			<Later />
 		</Container>
 	</div>
 </template>
@@ -16,14 +16,20 @@
 import Container from './components/Container.vue';
 import AddTodo from './components/AddTodo.vue';
 import Todo from './components/Todo.vue';
+import Later from './components/Later.vue';
+
 import { useStore } from 'vuex';
 
 const store = useStore();
 
 const getTaskFromLocalStorage = () => {
 	const tasks = JSON.parse(localStorage.getItem('smart-tasks'));
+	const later = JSON.parse(localStorage.getItem('later-tasks'));
 	if (tasks) {
 		store.commit('setTasks', tasks);
+	}
+	if (later) {
+		store.commit('setLater', later);
 	}
 };
 getTaskFromLocalStorage();
