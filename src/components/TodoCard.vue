@@ -2,6 +2,7 @@
 	<div
 		class="card-con"
 		:style="{ backgroundColor: task.color, color: task.fontColor }"
+		ref="cardRef"
 	>
 		<div class="card-header mb-2">
 			{{ task.title }}
@@ -24,6 +25,7 @@
 import { ref, toRefs } from 'vue';
 
 const buttonRef = ref();
+const cardRef = ref();
 const props = defineProps({
 	task: {
 		type: Object,
@@ -34,12 +36,16 @@ const { task } = toRefs(props);
 const emits = defineEmits(['deleteTask']);
 
 const deleteThisTask = () => {
-	//delete
 	emits('deleteTask', task.value.id);
 };
 
 const checked = () => {
 	buttonRef.value.style.backgroundColor = task.value.fontColor;
+	cardRef.value.classList.add('remove');
+	setTimeout(() => {
+		emits('deleteTask', task.value.id);
+		cardRef.value.classList.remove('remove');
+	}, 2500);
 };
 </script>
 
@@ -50,6 +56,22 @@ const checked = () => {
 	border-radius: 0.5rem;
 	position: relative;
 	width: 95%;
+}
+.card-con.remove {
+	animation: remove 2s ease-in 0.5s forwards;
+}
+@keyframes remove {
+	0% {
+		transform: translateX(0%);
+	}
+	50% {
+		opacity: 0.3;
+	}
+	100% {
+		opacity: 0;
+
+		transform: translateX(220%);
+	}
 }
 .card-description {
 	font-size: 0.9rem;
